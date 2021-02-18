@@ -1,0 +1,80 @@
+Everything ok
+================================
+def create
+  head :ok
+end
+================================
+
+rescue-me|main ⇒ curl -I -X POST localhost:3000/foos
+HTTP/1.1 200 OK
+Content-Type: text/html
+Cache-Control: no-cache
+X-Request-Id: 10fe3c33-faf9-4380-9293-c67fe5bc8dce
+X-Runtime: 0.002757
+Transfer-Encoding: chunked
+
+raise with custom ok
+================================
+
+  rescue_from ActiveRecord::RecordNotFound, with: :raise_not_found
+
+  def create
+    raise ActiveRecord::RecordNotFound
+    head :ok
+  end
+
+  def raise_not_found
+    head :ok
+  end
+================================
+
+rescue-me|main ⇒ curl -I -X POST localhost:3000/foos
+HTTP/1.1 200 OK
+Content-Type: text/html
+Cache-Control: no-cache
+X-Request-Id: a42710a4-13a6-485b-8504-6e6b5e11e9c2
+X-Runtime: 0.033348
+Transfer-Encoding: chunked
+
+raise without custom ok
+================================
+  # rescue_from ActiveRecord::RecordNotFound, with: :raise_not_found
+
+  def create
+    raise ActiveRecord::RecordNotFound
+    head :ok
+  end
+================================
+
+rescue-me|main⚡ ⇒ curl -I -X POST localhost:3000/foos
+HTTP/1.1 404 Not Found
+Content-Type: text/html; charset=UTF-8
+X-Web-Console-Session-Id: b03cd4993289832344828f0c8375cc2b
+X-Web-Console-Mount-Point: /__web_console
+X-Request-Id: d1faac5d-c3de-48ab-ba54-5cef228e0526
+X-Runtime: 0.193221
+Transfer-Encoding: chunked
+
+reraise with custom exception
+================================
+
+  rescue_from ActiveRecord::RecordNotFound, with: :raise_not_found
+
+  def create
+    raise ActiveRecord::RecordNotFound
+    head :ok
+  end
+
+  def raise_not_found
+    raise "What status code?"
+  end
+================================
+
+rescue-me|main⚡ ⇒ curl -I -X POST localhost:3000/foos
+HTTP/1.1 404 Not Found
+Content-Type: text/html; charset=UTF-8
+X-Web-Console-Session-Id: d7573409594d65c033797f8ee31b124e
+X-Web-Console-Mount-Point: /__web_console
+X-Request-Id: a77d2ba5-c91b-4595-a4bb-d3e8f6fc29e3
+X-Runtime: 0.119532
+Transfer-Encoding: chunked
