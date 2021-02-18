@@ -78,3 +78,29 @@ X-Web-Console-Mount-Point: /__web_console
 X-Request-Id: a77d2ba5-c91b-4595-a4bb-d3e8f6fc29e3
 X-Runtime: 0.119532
 Transfer-Encoding: chunked
+
+rails 6
+
+reraise with custom exception
+================================
+
+  rescue_from ActiveRecord::RecordNotFound, with: :raise_not_found
+
+  def create
+    raise ActiveRecord::RecordNotFound
+    head :ok
+  end
+
+  def raise_not_found
+    raise "What status code?"
+  end
+================================
+
+rescue-me|rails6 ⇒ curl -I -X POST localhost:3000/foos
+HTTP/1.1 500 Internal Server Error
+Content-Type: text/html; charset=UTF-8
+X-Web-Console-Session-Id: d647be39658f15f6da325549966100bb
+X-Web-Console-Mount-Point: /__web_console
+X-Request-Id: 44d57790-e394-4a6e-8420-c331265a3be2
+X-Runtime: 0.178702
+Content-Length: 223445
