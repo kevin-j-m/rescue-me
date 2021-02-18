@@ -79,6 +79,19 @@ X-Request-Id: a77d2ba5-c91b-4595-a4bb-d3e8f6fc29e3
 X-Runtime: 0.119532
 Transfer-Encoding: chunked
 
+Rails output
+================================
+Started POST "/foos" for ::1 at 2021-02-18 08:01:32 -0500
+Processing by FoosController#create as */*
+Completed 500 Internal Server Error in 1ms (ActiveRecord: 0.0ms)
+
+
+
+ActiveRecord::RecordNotFound (ActiveRecord::RecordNotFound):
+
+app/controllers/foos_controller.rb:7:in `create'
+================================
+
 rails 6
 
 reraise with custom exception
@@ -104,3 +117,25 @@ X-Web-Console-Mount-Point: /__web_console
 X-Request-Id: 44d57790-e394-4a6e-8420-c331265a3be2
 X-Runtime: 0.178702
 Content-Length: 223445
+
+Rails output
+================================
+Started POST "/foos" for ::1 at 2021-02-18 07:59:23 -0500
+Processing by FoosController#create as */*
+Completed 500 Internal Server Error in 0ms (ActiveRecord: 0.0ms | Allocations: 635)
+
+
+
+RuntimeError (What status code?):
+
+app/controllers/foos_controller.rb:12:in `raise_not_found'
+Started POST "/foos" for ::1 at 2021-02-18 07:59:36 -0500
+Processing by FoosController#create as */*
+Completed 500 Internal Server Error in 1ms (ActiveRecord: 0.0ms | Allocations: 652)
+
+
+
+RuntimeError (What status code?):
+
+app/controllers/foos_controller.rb:12:in `raise_not_found'
+================================
