@@ -1,0 +1,61 @@
+https://github.com/rails/rails/blob/5-2-stable/actionpack/lib/action_dispatch/middleware/debug_exceptions.rb#L70
+
+Added:
+
+
+      puts "debug exceptions call rescue"
+      puts exception.class.name
+
+      puts "show exceptions?"
+      puts request.show_exceptions?
+
+debug exceptions call rescue
+RuntimeError
+show exceptions?
+true
+
+https://github.com/rails/rails/blob/6de08e52ebfdee945699c3599e6a282b045c9495/actionpack/lib/action_dispatch/middleware/debug_exceptions.rb#L77
+
+Added:
+
+        puts "render exception"
+        puts exception.class.name
+
+render exception
+RuntimeError
+
+Output in log_error
+
+      def log_error(request, wrapper)
+        logger = logger(request)
+        return unless logger
+
+        exception = wrapper.exception
+        puts "log_error"
+        puts exception.class.name
+
+before log error
+log_error
+ActiveRecord::RecordNotFound
+  
+ActiveRecord::RecordNotFound (ActiveRecord::RecordNotFound):
+  
+app/controllers/foos_controller.rb:7:in `create'
+after log error
+
+
+# Debugging in ExceptionWrapper
+      def original_exception(exception)
+        puts "original exception"
+        puts exception.class.name
+        if @@rescue_responses.has_key?(exception.cause.class.name)
+          puts "exception cause in rescue exceptions, provide original exception"
+          exception.cause
+        else
+          exception
+        end
+      end
+
+original exception
+RuntimeError
+exception cause in rescue exceptions, provide original exception
